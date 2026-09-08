@@ -20,7 +20,7 @@ export interface Quesito {
 
 export interface ReportData {
   // Config
-  folderNumber: string; // Pasta IMESC
+  folderNumber: string; // Pasta IMC
   peritoName: string;
   peritoCrm: string;
   logoUrl: string | null;
@@ -30,7 +30,8 @@ export interface ReportData {
     autoridade: string;
     numero: string;
     natureza: string;
-    registroImesc: string;
+    registroImc: string;
+    registroImesc?: string;
     dataPericia: string;
     assistentes: string;
     requerente: {
@@ -91,7 +92,7 @@ export const INITIAL_REPORT_DATA: ReportData = {
     autoridade: '',
     numero: '',
     natureza: '',
-    registroImesc: '',
+    registroImc: '',
     dataPericia: new Date().toISOString().split('T')[0],
     assistentes: '',
     requerente: {

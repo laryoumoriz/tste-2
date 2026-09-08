@@ -24,7 +24,7 @@ const Sidebar: React.FC<SidebarProps> = ({ currentSection, onNavigate }) => {
     <aside className="w-64 bg-slate-900 text-slate-100 flex-shrink-0 h-screen overflow-y-auto sticky top-0 border-r border-slate-800 shadow-xl flex flex-col">
       <div className="p-6 border-b border-slate-800 flex items-center space-x-3">
         <div className="w-8 h-8 bg-red-700 rounded-full flex items-center justify-center font-serif font-bold text-white border-2 border-white shadow">SP</div>
-        <h1 className="font-bold text-lg tracking-wide">Laudos IMESC</h1>
+        <h1 className="font-bold text-lg tracking-wide">Laudos IMC</h1>
       </div>
       
       <div className="p-4 pb-0">
@@ -50,7 +50,7 @@ const Sidebar: React.FC<SidebarProps> = ({ currentSection, onNavigate }) => {
               onClick={() => onNavigate(item.section)}
               className={`w-full flex items-center space-x-3 px-4 py-3 rounded-lg transition-all duration-200 ${
                 isActive
-                  ? 'bg-imesc-600 text-white shadow-md'
+                  ? 'bg-imc-600 text-white shadow-md'
                   : 'hover:bg-slate-800 text-slate-400 hover:text-slate-100'
               }`}
             >

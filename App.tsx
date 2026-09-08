@@ -17,12 +17,15 @@ const App: React.FC = () => {
 
   // Load data and settings from localStorage on mount
   useEffect(() => {
-    const savedData = localStorage.getItem('imesc_report_data');
-    const savedConfig = localStorage.getItem('imesc_app_config');
+    const savedData = localStorage.getItem('imc_report_data') || localStorage.getItem('imesc_report_data');
+    const savedConfig = localStorage.getItem('imc_app_config') || localStorage.getItem('imesc_app_config');
 
     if (savedData) {
       try {
         const parsedData = JSON.parse(savedData);
+        if (parsedData.processo && !parsedData.processo.registroImc && parsedData.processo.registroImesc) {
+          parsedData.processo.registroImc = parsedData.processo.registroImesc;
+        }
         // Merge with initial data to ensure all fields exist (migration safety)
         setData({ ...INITIAL_REPORT_DATA, ...parsedData });
         setLastSaved(new Date());
@@ -45,7 +48,7 @@ const App: React.FC = () => {
 
   // Save settings when changed
   useEffect(() => {
-    localStorage.setItem('imesc_app_config', JSON.stringify({ autoSaveEnabled }));
+    localStorage.setItem('imc_app_config', JSON.stringify({ autoSaveEnabled }));
   }, [autoSaveEnabled]);
 
   // Auto-save interval
@@ -53,7 +56,7 @@ const App: React.FC = () => {
     if (!autoSaveEnabled) return;
 
     const intervalId = setInterval(() => {
-      localStorage.setItem('imesc_report_data', JSON.stringify(data));
+      localStorage.setItem('imc_report_data', JSON.stringify(data));
       setLastSaved(new Date());
     }, 30000); // 30 seconds
 
@@ -99,7 +102,7 @@ const App: React.FC = () => {
 
   // Manual Save
   const handleManualSave = () => {
-    localStorage.setItem('imesc_report_data', JSON.stringify(data));
+    localStorage.setItem('imc_report_data', JSON.stringify(data));
     setLastSaved(new Date());
   };
 
@@ -107,6 +110,7 @@ const App: React.FC = () => {
   const handleResetData = () => {
     if (confirm("Tem certeza que deseja limpar todos os dados? Esta ação não pode ser desfeita.")) {
       setData(INITIAL_REPORT_DATA);
+      localStorage.removeItem('imc_report_data');
       localStorage.removeItem('imesc_report_data');
       setLastSaved(null);
     }
@@ -229,7 +233,7 @@ const App: React.FC = () => {
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <TextInput label="Número da Pasta IMESC" value={data.folderNumber} onChange={e => updateData('folderNumber', e.target.value)} placeholder="Ex: 12345/2024" />
+              <TextInput label="Número da Pasta IMC" value={data.folderNumber} onChange={e => updateData('folderNumber', e.target.value)} placeholder="Ex: 12345/2024" />
               <TextInput label="Nome do Perito" value={data.peritoName} onChange={e => updateData('peritoName', e.target.value)} />
               <TextInput label="CRM" value={data.peritoCrm} onChange={e => updateData('peritoCrm', e.target.value)} />
             </div>
@@ -251,7 +255,7 @@ const App: React.FC = () => {
                     <TextInput label="Autoridade Requisitante" value={data.processo.autoridade} onChange={e => updateData('processo.autoridade', e.target.value)} />
                     <TextInput label="Número do Processo" value={data.processo.numero} onChange={e => updateData('processo.numero', e.target.value)} />
                     <TextInput label="Natureza da Ação" value={data.processo.natureza} onChange={e => updateData('processo.natureza', e.target.value)} />
-                    <TextInput label="Registro IMESC" value={data.processo.registroImesc} onChange={e => updateData('processo.registroImesc', e.target.value)} />
+                    <TextInput label="Registro IMC" value={data.processo.registroImc || (data.processo as any).registroImesc || ''} onChange={e => updateData('processo.registroImc', e.target.value)} />
                     <TextInput label="Data da Perícia" type="date" value={data.processo.dataPericia} onChange={e => updateData('processo.dataPericia', e.target.value)} />
                     <TextInput label="Requerido" value={data.processo.requerido} onChange={e => updateData('processo.requerido', e.target.value)} />
                 </div>
@@ -320,7 +324,7 @@ const App: React.FC = () => {
              <div className="mb-8 bg-white p-6 rounded-lg border border-slate-200 shadow-sm">
                <div className="flex justify-between items-center mb-4">
                  <h3 className="text-lg font-bold text-slate-700">{title}</h3>
-                 <button onClick={() => addQuesito(type)} className="flex items-center text-sm bg-imesc-100 text-imesc-700 px-3 py-1.5 rounded hover:bg-imesc-200">
+                 <button onClick={() => addQuesito(type)} className="flex items-center text-sm bg-imc-100 text-imc-700 px-3 py-1.5 rounded hover:bg-imc-200">
                     <Plus size={16} className="mr-1"/> Adicionar
                  </button>
                </div>
@@ -330,10 +334,10 @@ const App: React.FC = () => {
                      <div key={q.id} className="relative pl-8 border-l-4 border-slate-300">
                        <span className="absolute -left-[26px] top-0 bg-slate-200 text-slate-600 rounded-full w-6 h-6 flex items-center justify-center text-xs font-bold">{idx + 1}</span>
                        <div className="mb-2">
-                         <input placeholder="Pergunta..." className="w-full font-bold text-slate-800 bg-transparent border-b border-transparent hover:border-slate-300 focus:border-imesc-500 outline-none transition-colors" value={q.question} onChange={e => updateQuesito(type, q.id, 'question', e.target.value)} />
+                         <input placeholder="Pergunta..." className="w-full font-bold text-slate-800 bg-transparent border-b border-transparent hover:border-slate-300 focus:border-imc-500 outline-none transition-colors" value={q.question} onChange={e => updateQuesito(type, q.id, 'question', e.target.value)} />
                        </div>
                        <div>
-                         <textarea placeholder="Resposta..." className="w-full text-slate-600 text-sm bg-slate-50 p-2 rounded focus:ring-1 focus:ring-imesc-400 outline-none resize-none" rows={2} value={q.answer} onChange={e => updateQuesito(type, q.id, 'answer', e.target.value)} />
+                         <textarea placeholder="Resposta..." className="w-full text-slate-600 text-sm bg-slate-50 p-2 rounded focus:ring-1 focus:ring-imc-400 outline-none resize-none" rows={2} value={q.answer} onChange={e => updateQuesito(type, q.id, 'answer', e.target.value)} />
                        </div>
                        <button onClick={() => removeQuesito(type, q.id)} className="absolute top-0 right-0 text-slate-300 hover:text-red-500 transition-colors">
                           <Trash2 size={16} />

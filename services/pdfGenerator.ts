@@ -66,7 +66,7 @@ const createPdfDocument = (data: ReportData): jsPDF => {
       y += 10;
       doc.setFont("times", "normal");
       doc.setFontSize(12);
-      doc.text("Instituto de Medicina Social e de Criminologia de São Paulo – IMESC", pageWidth / 2, y, { align: "center" });
+      doc.text("Instituto de Medicina Social e de Criminologia de São Paulo – IMC", pageWidth / 2, y, { align: "center" });
       
       y += 60;
       doc.setFont("times", "bold");
@@ -182,7 +182,7 @@ const createPdfDocument = (data: ReportData): jsPDF => {
     doc.text("GOVERNO DO ESTADO DE SÃO PAULO | SECRETARIA DA JUSTIÇA E CIDADANIA", 50, 15);
     
     doc.setFont("times", "normal");
-    doc.text("Instituto de Medicina Social e de Criminologia de São Paulo – IMESC", 50, 20);
+    doc.text("Instituto de Medicina Social e de Criminologia de São Paulo – IMC", 50, 20);
     doc.setFontSize(9);
     doc.text("Rua Barra Funda, 824 – São Paulo / SP – CEP: 01152-000", 50, 25);
     
@@ -201,7 +201,7 @@ const createPdfDocument = (data: ReportData): jsPDF => {
     doc.text(`CRM: ${data.peritoCrm || ""}`, marginLeft, footerY);
 
     doc.setFont("times", "bold");
-    doc.text(`PASTA IMESC: ${data.folderNumber || "S/N"}`, pageWidth - marginRight, footerY - 5, { align: "right" });
+    doc.text(`PASTA IMC: ${data.folderNumber || "S/N"}`, pageWidth - marginRight, footerY - 5, { align: "right" });
     
     doc.setFont("times", "normal");
     doc.text(`${pageNum}`, pageWidth - marginRight, footerY, { align: "right" });
@@ -221,7 +221,7 @@ const createPdfDocument = (data: ReportData): jsPDF => {
       [{ content: 'Autoridade requisitante', styles: { fontStyle: 'bold', fillColor: [225, 236, 246] } }, data.processo.autoridade],
       [{ content: 'Número do processo', styles: { fontStyle: 'bold', fillColor: [225, 236, 246] } }, data.processo.numero],
       [{ content: 'Natureza da ação', styles: { fontStyle: 'bold', fillColor: [225, 236, 246] } }, data.processo.natureza],
-      [{ content: 'Registro IMESC', styles: { fontStyle: 'bold', fillColor: [225, 236, 246] } }, data.processo.registroImesc],
+      [{ content: 'Registro IMC', styles: { fontStyle: 'bold', fillColor: [225, 236, 246] } }, data.processo.registroImc || (data.processo as any).registroImesc || ''],
       [{ content: 'Data da perícia', styles: { fontStyle: 'bold', fillColor: [225, 236, 246] } }, data.processo.dataPericia],
       // Requerente Header
       [{ content: 'Dados do Requerente', colSpan: 2, styles: { fontStyle: 'bold', halign: 'center', fillColor: [204, 204, 204] } }],
@@ -409,7 +409,7 @@ const createPdfDocument = (data: ReportData): jsPDF => {
 
 export const generatePdf = (data: ReportData) => {
   const doc = createPdfDocument(data);
-  doc.save(`Laudo_IMESC_${data.folderNumber.replace(/[^a-zA-Z0-9]/g, '_') || 'Draft'}.pdf`);
+  doc.save(`Laudo_IMC_${data.folderNumber.replace(/[^a-zA-Z0-9]/g, '_') || 'Draft'}.pdf`);
 };
 
 export const generatePdfPreviewUrl = (data: ReportData): string => {

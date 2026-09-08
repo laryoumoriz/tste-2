@@ -85,7 +85,7 @@ export const generateDocx = async (data: ReportData) => {
       new TableRow({ children: [cell("Autoridade requisitante", true, "E1ECF6"), cell(data.processo.autoridade)] }),
       new TableRow({ children: [cell("Número do processo", true, "E1ECF6"), cell(data.processo.numero)] }),
       new TableRow({ children: [cell("Natureza da ação", true, "E1ECF6"), cell(data.processo.natureza)] }),
-      new TableRow({ children: [cell("Registro IMESC", true, "E1ECF6"), cell(data.processo.registroImesc)] }),
+      new TableRow({ children: [cell("Registro IMC", true, "E1ECF6"), cell(data.processo.registroImc || (data.processo as any).registroImesc || '')] }),
       new TableRow({ children: [cell("Data da perícia", true, "E1ECF6"), cell(data.processo.dataPericia)] }),
       new TableRow({ children: [cell("Dados do Requerente", true, "CCCCCC"), cell("", false, "CCCCCC")] }), // Header row style
       new TableRow({ children: [cell("Nome", true, "E1ECF6"), cell(data.processo.requerente.nome)] }),
@@ -147,7 +147,7 @@ export const generateDocx = async (data: ReportData) => {
                             alignment: AlignmentType.CENTER,
                             children: [
                                 new TextRun({
-                                    text: "Instituto de Medicina Social e de Criminologia de São Paulo – IMESC",
+                                    text: "Instituto de Medicina Social e de Criminologia de São Paulo – IMC",
                                     font: FONT_FAMILY,
                                     size: 16,
                                 }),
@@ -209,7 +209,7 @@ export const generateDocx = async (data: ReportData) => {
                           new Paragraph({
                               alignment: AlignmentType.RIGHT,
                               children: [
-                                  new TextRun({ text: `PASTA IMESC: ${data.folderNumber || "S/N"}`, bold: true, size: 16, font: FONT_FAMILY }),
+                                  new TextRun({ text: `PASTA IMC: ${data.folderNumber || "S/N"}`, bold: true, size: 16, font: FONT_FAMILY }),
                               ]
                           }),
                            new Paragraph({
@@ -298,7 +298,7 @@ export const generateDocx = async (data: ReportData) => {
             new Paragraph({
                 alignment: AlignmentType.CENTER,
                 spacing: { after: 2000 },
-                children: [new TextRun({ text: "Instituto de Medicina Social e de Criminologia de São Paulo – IMESC", font: FONT_FAMILY, size: 24 })]
+                children: [new TextRun({ text: "Instituto de Medicina Social e de Criminologia de São Paulo – IMC", font: FONT_FAMILY, size: 24 })]
             }),
             new Paragraph({
                 alignment: AlignmentType.CENTER,
@@ -461,6 +461,6 @@ export const generateDocx = async (data: ReportData) => {
   });
 
   Packer.toBlob(doc).then((blob) => {
-    saveAs(blob, `Laudo_IMESC_${data.folderNumber.replace(/[^a-zA-Z0-9]/g, '_') || 'Draft'}.docx`);
+    saveAs(blob, `Laudo_IMC_${data.folderNumber.replace(/[^a-zA-Z0-9]/g, '_') || 'Draft'}.docx`);
   });
 };
