@@ -1,0 +1,6 @@
+{
+  "name": "IMESC Report Generator",
+  "description": "A legal-tech web application to generate standardized Medico-Legal reports for IMESC (São Paulo), featuring dynamic forms, standardized text insertion, and DOCX export.",
+  "requestFramePermissions": [],
+  "majorCapabilities": []
+}
